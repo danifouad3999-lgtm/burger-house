@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Burger House</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --main:#ff7a00;
+  --bg:#0f0f0f;
+  --card:#1c1c1c;
+  --muted:#bdbdbd;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:#fff;
+  font-family:'Cairo',sans-serif;
+}
+
+/* NAV */
+nav{
+  position:sticky; top:0; z-index:10;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:12px 16px; background:#000;
+  border-bottom:1px solid #222;
+}
+.brand{color:var(--main); font-weight:900}
+.actions{display:flex; gap:8px}
+.btn{
+  background:var(--main); color:#fff; border:none;
+  padding:10px 14px; border-radius:8px; cursor:pointer; font-weight:700;
+}
+.btn.secondary{background:#222}
+
+/* HERO */
+.hero{text-align:center;padding:20px}
+.hero h2{margin:10px 0}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:14px; padding:16px;
+}
+.card{
+  background:var(--card);
+  border-radius:12px;
+  overflow:hidden;
+}
+.card img{width:100%;height:160px;object-fit:cover}
+.card .content{padding:12px}
+.price{color:var(--main);font-weight:900}
+
+/* CART */
+.cart{
+  position:fixed; inset:0; top:auto;
+  background:#111;
+  max-height:0; overflow:hidden;
+  transition:.3s;
+}
+.cart.open{max-height:70vh}
+.cart-body{padding:10px 16px}
+.cart-item{display:flex;justify-content:space-between;margin:8px 0}
+
+.fab{
+  position:fixed; bottom:16px; right:16px;
+  background:var(--main); padding:14px; border-radius:50%;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <div class="brand">Burger House</div>
+  <button class="btn" onclick="toggleCart()">🛒 <span id="count">0</span></button>
+</nav>
+
+<div class="hero">
+  <h2>برجر مشوي 🔥</h2>
+  <p>اطلب الآن</p>
+</div>
+
+<div class="grid" id="menu"></div>
+
+<div class="cart" id="cart">
+  <div class="cart-body" id="items"></div>
+</div>
+
+<div class="fab" onclick="toggleCart()">🛒</div>
+
+<script>
+const MENU=[
+{id:1,name:"كلاسيك",price:25,img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd"},
+{id:2,name:"سبايسي",price:28,img:"https://images.unsplash.com/photo-1553979459-d2229ba7433b"},
+{id:3,name:"دبل",price:35,img:"https://images.unsplash.com/photo-1606755962773-d324e2b5b0c5"}
+];
+
+let cart=[];
+
+function render(){
+document.getElementById("menu").innerHTML=MENU.map(p=>`
+<div class="card">
+<img src="${p.img}">
+<div class="content">
+<h3>${p.name}</h3>
+<div class="price">${p.price} ريال</div>
+<button class="btn" onclick="add(${p.id})">إضافة</button>
+</div>
+</div>
+`).join("");
+}
+
+function add(id){
+const item=MENU.find(x=>x.id===id);
+cart.push(item);
+document.getElementById("count").innerText=cart.length;
+renderCart();
+}
+
+function renderCart(){
+document.getElementById("items").innerHTML=cart.map(i=>`
+<div class="cart-item">
+<span>${i.name}</span>
+<span>${i.price}</span>
+</div>
+`).join("");
+}
+
+function toggleCart(){
+document.getElementById("cart").classList.toggle("open");
+}
+
+render();
+</script>
+
+</body>
+</html>
